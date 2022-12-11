@@ -6,20 +6,28 @@ export const WaperContainer = styled.div`
   background: ${({ theme }) => theme['gray-400']};
   display: flex;
   flex-direction: column;
-  gap: 3rem;
   overflow: hidden;
   padding: 2rem;
 `;
 
 export const FieldsContainer = styled.div`
-  height: 10rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  color: ${({ theme }) => theme.black};
-  gap: 3rem;
-  margin-left: 4rem;
-  text-align: center;
+  padding-bottom: 1rem;
+  color: ${({ theme }) => theme.white};
+  gap: 0.8rem;
+
+  & > div {
+    height: 7rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    background: ${({ theme }) => theme['gray-500']};
+    color: ${({ theme }) => theme.black};
+    gap: 3rem;
+    padding: 1rem;
+
+    text-align: center;
+  }
 
   label {
     display: flex;
@@ -51,8 +59,8 @@ export const WarperTableContainer = styled.div`
   height: 100%;
   width: 100%;
   color: ${({ theme }) => theme.white};
-  padding: 2rem 3rem;
-  background: ${({ theme }) => theme['gray-400']};
+  padding: 0rem 3rem;
+  background: ${({ theme }) => theme['gray-600']};
   border-radius: 8px;
 
   table {
@@ -96,7 +104,7 @@ export const WarperTableContainer = styled.div`
       width: 15%;
 
       &:first-child {
-        width: 15%;
+        width: 50%;
         padding-left: 1.5rem;
       }
 
@@ -133,6 +141,14 @@ export const WarperTableContainer = styled.div`
       }
     }
   }
+`;
+
+export const TableContainer = styled.div`
+  display: flex;
+  max-height: 38rem;
+  flex-direction: column;
+  overflow: scroll;
+  border-radius: 5px;
 `;
 
 export const InputContainer = styled.input`
@@ -183,4 +199,70 @@ export const WaperButtonContainer = styled.div`
   .buttons {
     display: flex;
   }
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 1.5rem;
+  padding-right: 1rem;
+  gap: 2rem;
+`;
+
+export const FieldsItemContainer = styled.div`
+  padding: 2rem 0;
+  gap: 0.8rem;
+
+  & .buttons {
+    width: 10rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+
+    input {
+      width: 3rem;
+      border: none;
+      border-radius: 5px;
+      border-bottom: solid 2px transparent;
+
+      &:focus {
+        border-color: ${({ theme }) => theme['green-500']};
+      }
+    }
+  }
+
+  & > div {
+    display: flex;
+    gap: 2rem;
+    padding: 1.5rem 1rem;
+    width: 100%;
+    background: ${({ theme }) => theme['gray-500']};
+    border-radius: 5px;
+  }
+
+  button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+`;
+
+const BaseInput = styled.input`
+  border-radius: 5px;
+  border: none;
+  background: ${({ theme }) => theme['gray-300']};
+  border-bottom: solid 2px transparent;
+`;
+
+export const InputContainerDefault = styled(BaseInput)`
+  width: 20rem;
+`;
+
+export const InputContainerSmall = styled(BaseInput)`
+  width: 15rem;
+`;
+
+export const InputContainerBigger = styled(BaseInput)`
+  width: 35rem;
 `;

@@ -1,4 +1,13 @@
-import { PlusCircle, MinusCircle, ShoppingCart } from 'phosphor-react';
+import cuid from 'cuid';
+
+import {
+  PlusCircle,
+  MinusCircle,
+  ShoppingCart,
+  Trash,
+  PencilLine,
+  FloppyDisk,
+} from 'phosphor-react';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -6,16 +15,23 @@ import { Header } from '../../components/Header';
 
 import {
   ButtonCartEncomenda,
+  ButtonContainer,
   ButtonCriarEncomendaContainer,
   FieldsContainer,
+  FieldsItemContainer,
   InputContainer,
+  InputContainerBigger,
+  InputContainerDefault,
+  InputContainerSmall,
   InputQuantityContainer,
+  TableContainer,
   WaperButtonContainer,
   WaperContainer,
   WarperTableContainer,
 } from './newencomendas.styles';
 
 interface NewProdcutProps {
+  id: string;
   product: string;
   pesoProduct: string;
   quantity: number;
@@ -37,10 +53,10 @@ export function NewOrder() {
   const [idActiveOrder, setIdActiveOrder] = useState(0);
   const [products, setProducts] = useState<NewProdcutProps[]>();
 
-  const descPrincipal = useRef<HTMLTableDataCellElement>(null);
+  const descPrincipal = useRef<HTMLInputElement>(null);
   const descVariant = useRef<HTMLInputElement>(null);
   const peso = useRef<HTMLInputElement>(null);
-  const price = useRef<HTMLTableCellElement>(null);
+  const price = useRef<HTMLInputElement>(null);
 
   const { register, handleSubmit, reset } = useForm();
 
@@ -63,6 +79,7 @@ export function NewOrder() {
       products: order,
     };
 
+    console.log(newOrder);
     setNewOrder(activeOrder);
     setIdActiveOrder(0);
     setOrder([]);
@@ -75,31 +92,56 @@ export function NewOrder() {
   }
 
   function handleAddProductInCart() {
-    if (descPrincipal.current!.innerText !== '' && peso.current!.value !== '') {
-      console.log('pass');
-      const product =
-        descPrincipal.current?.parentElement?.innerText +
-        ' ' +
-        descPrincipal.current!.innerText;
+    const descriptionProduct =
+      descPrincipal.current!.value + ' - ' + descVariant.current!.value;
+    const weightProduct = peso.current!.value;
+    const priceProduct = price.current!.value;
 
-      const pesoProduct = peso.current!.value;
+    console.log(descriptionProduct, weightProduct, priceProduct);
 
-      const newProduct = {
-        product,
-        pesoProduct,
-        quantity,
-        price: price.current!.innerText,
+    if (
+      descriptionProduct !== '' &&
+      weightProduct !== '' &&
+      priceProduct !== '' &&
+      quantity !== 0
+    ) {
+      const newItem: NewProdcutProps = {
+        id: cuid(),
+        pesoProduct: weightProduct,
+        price: priceProduct,
+        product: descriptionProduct,
+        quantity: quantity,
       };
 
-      setOrder((prev) => [...prev, newProduct]);
+      setOrder((prev) => [...prev, newItem]);
 
-      const idOrder = document.getElementById(
-        'num_encomenda'
-      ) as HTMLInputElement;
-      if (Number(idOrder.value) === 0) {
-        setIdActiveOrder(Math.floor(1000 + Math.random() * 9000));
-      }
+      descPrincipal.current!.value = '';
+      descVariant.current!.value = '';
+      peso.current!.value = '';
+      price.current!.value = '';
+      setQuantity(0);
     }
+  }
+
+  function handleDeleteItem(id: string) {
+    const newList = order.filter((item) => item.id !== id);
+
+    setOrder(newList);
+  }
+
+  function handleEditItem(id: string) {
+    const newList = order.filter((item) => item.id !== id);
+    order.filter((item) => {
+      if (item.id === id) {
+        descPrincipal.current!.value = item.product.split('-')[0];
+        descVariant.current!.value = item.product.split('-')[1];
+        peso.current!.value = item.pesoProduct;
+        price.current!.value = item.price;
+        setQuantity(item.quantity);
+      }
+    });
+
+    setOrder(newList);
   }
 
   return (
@@ -107,34 +149,34 @@ export function NewOrder() {
       <Header title='Bolacha Maria - Registo Encomendas' />
       <form onSubmit={handleSubmit(handleCreateNewOrder)}>
         <FieldsContainer>
-          <label htmlFor='num_encomenda'>
-            <span>Nº Encomenda</span>
-            <InputContainer
-              {...register('idOrder')}
-              value={idActiveOrder}
-              readOnly
-              id='num_encomenda'
-            />
-          </label>
-          <label htmlFor='nome_cliente'>
-            <span>Nome cliente</span>
-            <input type='text' id='nome_cliente' {...register('name')} />
-          </label>
-          <label htmlFor='telemovel'>
-            <span>Telemovel</span>
-            <input type='number' id='telemovel' {...register('phone')} />
-          </label>
-          <label htmlFor='data_entrega'>
-            <span>Data/Hora</span>
-            <input
-              type='datetime-local'
-              id='data_entrega'
-              {...register('dateTime')}
-            />
-          </label>
-          <ButtonCriarEncomendaContainer type='submit'>
-            <PlusCircle size={25} /> Nova Encomenda
-          </ButtonCriarEncomendaContainer>
+          <h3>Dados encomenda</h3>
+          <div>
+            <label htmlFor='num_encomenda'>
+              <span>Nº Encomenda</span>
+              <InputContainer
+                {...register('idOrder')}
+                value={idActiveOrder}
+                readOnly
+                id='num_encomenda'
+              />
+            </label>
+            <label htmlFor='nome_cliente'>
+              <span>Nome cliente</span>
+              <input type='text' id='nome_cliente' {...register('name')} />
+            </label>
+            <label htmlFor='telemovel'>
+              <span>Telemovel</span>
+              <input type='number' id='telemovel' {...register('phone')} />
+            </label>
+            <label htmlFor='data_entrega'>
+              <span>Data/Hora</span>
+              <input
+                type='datetime-local'
+                id='data_entrega'
+                {...register('dateTime')}
+              />
+            </label>
+          </div>
         </FieldsContainer>
       </form>
       <WarperTableContainer>
@@ -148,56 +190,105 @@ export function NewOrder() {
           <option value='1kg' />
           <option value='500g' />
         </datalist>
-        <table>
-          <thead>
-            <tr>
-              <th>Descrição</th>
-              <th>Variante</th>
-              <th>Peso</th>
-              <th>Valor</th>
-              <th>Quantidade</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td ref={descPrincipal}>Bolo rei</td>
-              <td>
-                <input type='text' ref={descVariant} />
-              </td>
-              <td>
-                <input type='text' list='peso' className='peso' ref={peso} />
-              </td>
-              <td ref={price}>19.99</td>
-              <td>
-                <WaperButtonContainer>
-                  <div className='buttons'>
-                    <button onClick={handleDecreaseQuantity}>
-                      <MinusCircle />
-                    </button>
-                    <span>
-                      <InputQuantityContainer
-                        placeholder='0'
-                        onChange={handleChangeQuantity}
-                        value={quantity}
-                        id='quantity'
-                        min={0}
-                      />
-                    </span>
-                    <button onClick={handleIncreaseQuantity}>
-                      <PlusCircle />
-                    </button>
-                  </div>
-                </WaperButtonContainer>
-              </td>
-              <td>
-                <ButtonCartEncomenda onClick={handleAddProductInCart}>
-                  <ShoppingCart size={25} />
-                </ButtonCartEncomenda>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <datalist id='description'>
+          <option value='Bolo rei' />
+          <option value='Pão de ló' />
+          <option value='Rabanada' />
+        </datalist>
+        <datalist id='variant'>
+          <option value='Chocolate' />
+          <option value='tradicional' />
+          <option value='nutella' />
+        </datalist>
+        <datalist id='price'>
+          <option value='19.99€' />
+          <option value='18.99€' />
+          <option value='17.99€' />
+        </datalist>
+
+        <FieldsItemContainer>
+          <ButtonCriarEncomendaContainer type='submit'>
+            <FloppyDisk size={25} /> Salvar encomenda
+          </ButtonCriarEncomendaContainer>
+          <h3>Novo item</h3>
+          <div>
+            <InputContainerDefault
+              ref={descPrincipal}
+              type='text'
+              list='description'
+            />
+            <InputContainerBigger
+              ref={descVariant}
+              type='text'
+              list='variant'
+            />
+            <InputContainerSmall ref={peso} type='text' list='peso' />
+            <InputContainerSmall ref={price} type='text' list='price' />
+
+            <div className='buttons'>
+              <button onClick={handleDecreaseQuantity}>
+                <MinusCircle size={25} />
+              </button>
+              <span>
+                <InputQuantityContainer
+                  placeholder='0'
+                  onChange={handleChangeQuantity}
+                  value={quantity}
+                  id='quantity'
+                  min={0}
+                />
+              </span>
+              <button onClick={handleIncreaseQuantity}>
+                <PlusCircle size={25} />
+              </button>
+            </div>
+
+            <ButtonContainer>
+              <ButtonCartEncomenda onClick={handleAddProductInCart}>
+                <ShoppingCart size={25} />
+              </ButtonCartEncomenda>
+            </ButtonContainer>
+          </div>
+        </FieldsItemContainer>
+        <TableContainer>
+          <table>
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Peso</th>
+                <th>Valor</th>
+                <th>Quantidade</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {order.map((item) => {
+                return (
+                  <tr key={item.id}>
+                    <td>{item.product}</td>
+                    <td>{item.pesoProduct}</td>
+                    <td>{item.price}</td>
+                    <td>{item.quantity}</td>
+                    <td>
+                      <ButtonContainer>
+                        <ButtonCartEncomenda
+                          onClick={() => handleEditItem(item.id)}
+                        >
+                          <PencilLine size={25} />
+                        </ButtonCartEncomenda>
+                        <ButtonCartEncomenda
+                          onClick={() => handleDeleteItem(item.id)}
+                        >
+                          <Trash size={25} />
+                        </ButtonCartEncomenda>
+                      </ButtonContainer>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </TableContainer>
       </WarperTableContainer>
     </WaperContainer>
   );
