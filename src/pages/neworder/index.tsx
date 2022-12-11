@@ -8,7 +8,7 @@ import {
   PencilLine,
   FloppyDisk,
 } from 'phosphor-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Header } from '../../components/Header';
@@ -49,9 +49,14 @@ interface NewOrderProps {
 export function NewOrder() {
   const [quantity, setQuantity] = useState(0);
   const [order, setOrder] = useState<NewProdcutProps[]>([]);
-  const [newOrder, setNewOrder] = useState<NewOrderProps>({} as NewOrderProps);
   const [idActiveOrder, setIdActiveOrder] = useState(0);
-  const [products, setProducts] = useState<NewProdcutProps[]>();
+  const [newOrder, setNewOrder] = useState<NewOrderProps>({
+    dateTime: '',
+    id: 0,
+    name: '',
+    phone: '',
+    products: [],
+  });
 
   const descPrincipal = useRef<HTMLInputElement>(null);
   const descVariant = useRef<HTMLInputElement>(null);
@@ -79,11 +84,17 @@ export function NewOrder() {
       products: order,
     };
 
-    console.log(newOrder);
+    console.log(order);
+    console.log(activeOrder);
     setNewOrder(activeOrder);
     setIdActiveOrder(0);
     setOrder([]);
     reset();
+    descPrincipal.current!.value = '';
+    descVariant.current!.value = '';
+    peso.current!.value = '';
+    price.current!.value = '';
+    setQuantity(0);
   }
 
   function handleChangeQuantity() {
@@ -96,8 +107,6 @@ export function NewOrder() {
       descPrincipal.current!.value + ' - ' + descVariant.current!.value;
     const weightProduct = peso.current!.value;
     const priceProduct = price.current!.value;
-
-    console.log(descriptionProduct, weightProduct, priceProduct);
 
     if (
       descriptionProduct !== '' &&
@@ -144,10 +153,12 @@ export function NewOrder() {
     setOrder(newList);
   }
 
+  const isButtonSaveOrderActive = order.length === 0;
+
   return (
     <WaperContainer>
       <Header title='Bolacha Maria - Registo Encomendas' />
-      <form onSubmit={handleSubmit(handleCreateNewOrder)}>
+      <form id='orderForm' onSubmit={handleSubmit(handleCreateNewOrder)}>
         <FieldsContainer>
           <h3>Dados encomenda</h3>
           <div>
@@ -207,7 +218,11 @@ export function NewOrder() {
         </datalist>
 
         <FieldsItemContainer>
-          <ButtonCriarEncomendaContainer type='submit'>
+          <ButtonCriarEncomendaContainer
+            disabled={!!isButtonSaveOrderActive}
+            form='orderForm'
+            type='submit'
+          >
             <FloppyDisk size={25} /> Salvar encomenda
           </ButtonCriarEncomendaContainer>
           <h3>Novo item</h3>

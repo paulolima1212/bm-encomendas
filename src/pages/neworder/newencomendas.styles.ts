@@ -13,7 +13,7 @@ export const WaperContainer = styled.div`
 export const FieldsContainer = styled.div`
   padding-bottom: 1rem;
   color: ${({ theme }) => theme.white};
-  gap: 0.8rem;
+  gap: 1.5rem;
 
   & > div {
     height: 7rem;
@@ -21,12 +21,12 @@ export const FieldsContainer = styled.div`
     display: flex;
     align-items: center;
     border-radius: 5px;
-    background: ${({ theme }) => theme['gray-500']};
-    color: ${({ theme }) => theme.black};
-    gap: 3rem;
+    background: ${({ theme }) => theme['gray-600']};
+    color: ${({ theme }) => theme.white};
+    gap: 4rem;
     padding: 1rem;
 
-    text-align: center;
+    text-align: left;
   }
 
   label {
@@ -37,7 +37,7 @@ export const FieldsContainer = styled.div`
 
   input {
     height: 3.2rem;
-    width: 15rem;
+    width: 20rem;
     border-radius: 4px;
     background: ${({ theme }) => theme['gray-300']};
     border: 0;
@@ -177,17 +177,25 @@ export const ButtonCriarEncomendaContainer = styled.button`
   justify-content: center;
   border-radius: 8px;
   border: none;
-  padding: 1.5rem 1rem;
+  padding: 1rem 1rem;
   background: ${({ theme }) => theme['green-500']};
   color: ${({ theme }) => theme.white};
   font-weight: 800;
   gap: 0.5rem;
-  cursor: pointer;
+  margin-bottom: 0.5rem;
+  opacity: 70%;
+
+  &:not(:disabled) {
+    cursor: pointer;
+    opacity: 100%;
+  }
 `;
 
 export const ButtonCartEncomenda = styled.button`
   height: 1rem;
   width: 1rem;
+  border: none;
+  background: transparent;
 `;
 
 export const WaperButtonContainer = styled.div`
@@ -195,10 +203,6 @@ export const WaperButtonContainer = styled.div`
   flex: 1;
   padding: 0 2rem;
   gap: 2.5rem;
-
-  .buttons {
-    display: flex;
-  }
 `;
 
 export const ButtonContainer = styled.div`
@@ -220,6 +224,12 @@ export const FieldsItemContainer = styled.div`
     justify-content: space-between;
     gap: 0.8rem;
 
+    button {
+      border: none;
+      background: transparent;
+      color: ${({ theme }) => theme['green-500']};
+    }
+
     input {
       width: 3rem;
       border: none;
@@ -239,12 +249,6 @@ export const FieldsItemContainer = styled.div`
     width: 100%;
     background: ${({ theme }) => theme['gray-500']};
     border-radius: 5px;
-  }
-
-  button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
   }
 `;
 
