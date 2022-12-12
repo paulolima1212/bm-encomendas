@@ -129,7 +129,7 @@ body, input, button, textarea{
     width: 5rem;
     border-radius: 50%;
     color: ${({theme:e})=>e.white};
-    background: ${({theme:e})=>e["green-500"]};
+    background: ${({theme:e})=>e["green-300"]};
   }
 `;function km({title:e}){return R(Lg,{children:[c("h1",{children:e}),c("nav",{children:R("ul",{children:[c("li",{children:c(Kl,{to:"/novaencomenda"})}),c("li",{children:c(Kl,{to:"/listaencomendas"})}),c("li",{children:c(Kl,{to:"/listaprodutos"})})]})})]})}const Pg=Le.div`
   display: flex;
