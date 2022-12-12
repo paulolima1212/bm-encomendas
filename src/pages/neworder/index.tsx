@@ -1,17 +1,10 @@
-import cuid from 'cuid';
-
-import {
-  PlusCircle,
-  MinusCircle,
-  ShoppingCart,
-  Trash,
-  PencilLine,
-  FloppyDisk,
-} from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-
 import { Header } from '../../components/Header';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import cuid from 'cuid';
+import * as z from 'zod';
 
 import {
   ButtonCartEncomenda,
@@ -23,12 +16,21 @@ import {
   InputContainerBigger,
   InputContainerDefault,
   InputContainerSmall,
+  InputIDContainer,
   InputQuantityContainer,
   TableContainer,
-  WaperButtonContainer,
   WaperContainer,
   WarperTableContainer,
 } from './newencomendas.styles';
+
+import {
+  PlusCircle,
+  MinusCircle,
+  ShoppingCart,
+  Trash,
+  PencilLine,
+  FloppyDisk,
+} from 'phosphor-react';
 
 interface NewProdcutProps {
   id: string;
@@ -38,32 +40,41 @@ interface NewProdcutProps {
   price: string;
 }
 
-interface NewOrderProps {
+export interface NewOrderProps {
   id: number;
   name: string;
   phone: string;
   dateTime: string;
   products: NewProdcutProps[];
+  statusOrder: 'pendente' | 'cancelada' | 'entregue';
 }
 
 export function NewOrder() {
+  const newOrderSchema = z.object({
+    name: z.string(),
+    phone: z.string(),
+    dateTime: z.string(),
+    status: z.enum(['pendente', 'cancelada', 'entregue']),
+  });
+
+  type NewOrderInputs = z.infer<typeof newOrderSchema>;
+
   const [quantity, setQuantity] = useState(0);
   const [order, setOrder] = useState<NewProdcutProps[]>([]);
   const [idActiveOrder, setIdActiveOrder] = useState(0);
-  const [newOrder, setNewOrder] = useState<NewOrderProps>({
-    dateTime: '',
-    id: 0,
-    name: '',
-    phone: '',
-    products: [],
-  });
+  const [newOrder, setNewOrder] = useState<NewOrderProps | null>(null);
 
   const descPrincipal = useRef<HTMLInputElement>(null);
   const descVariant = useRef<HTMLInputElement>(null);
   const peso = useRef<HTMLInputElement>(null);
   const price = useRef<HTMLInputElement>(null);
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm<NewOrderInputs>({
+    resolver: zodResolver(newOrderSchema),
+    defaultValues: {
+      status: 'pendente',
+    },
+  });
 
   function handleIncreaseQuantity() {
     setQuantity((prev) => prev + 1);
@@ -75,17 +86,16 @@ export function NewOrder() {
     }
   }
 
-  function handleCreateNewOrder(data: any) {
-    const activeOrder = {
+  function handleCreateNewOrder(data: NewOrderInputs) {
+    const activeOrder: NewOrderProps = {
       id: idActiveOrder,
       name: data.name,
       phone: data.phone,
       dateTime: data.dateTime,
       products: order,
+      statusOrder: data.status,
     };
 
-    console.log(order);
-    console.log(activeOrder);
     setNewOrder(activeOrder);
     setIdActiveOrder(0);
     setOrder([]);
@@ -155,6 +165,21 @@ export function NewOrder() {
 
   const isButtonSaveOrderActive = order.length === 0;
 
+  useEffect(() => {
+    const orderJSON = localStorage.getItem('@bolachamaria:encomendas');
+
+    if (!orderJSON) {
+      localStorage.setItem('@bolachamaria:encomendas', JSON.stringify([]));
+    } else if (newOrder) {
+      const newListOrders = JSON.parse(orderJSON);
+      newListOrders.push(newOrder);
+      localStorage.setItem(
+        '@bolachamaria:encomendas',
+        JSON.stringify(newListOrders)
+      );
+    }
+  }, [newOrder]);
+
   return (
     <WaperContainer>
       <Header title='Bolacha Maria - Registo Encomendas' />
@@ -164,8 +189,7 @@ export function NewOrder() {
           <div>
             <label htmlFor='num_encomenda'>
               <span>Nº Encomenda</span>
-              <InputContainer
-                {...register('idOrder')}
+              <InputIDContainer
                 value={idActiveOrder}
                 readOnly
                 id='num_encomenda'
@@ -173,18 +197,46 @@ export function NewOrder() {
             </label>
             <label htmlFor='nome_cliente'>
               <span>Nome cliente</span>
-              <input type='text' id='nome_cliente' {...register('name')} />
+              <InputContainer
+                type='text'
+                variant='15rem'
+                id='nome_cliente'
+                {...register('name')}
+              />
             </label>
             <label htmlFor='telemovel'>
               <span>Telemovel</span>
-              <input type='number' id='telemovel' {...register('phone')} />
+              <InputContainer
+                type='number'
+                id='telemovel'
+                variant='15rem'
+                {...register('phone')}
+              />
             </label>
             <label htmlFor='data_entrega'>
               <span>Data/Hora</span>
-              <input
+              <InputContainer
                 type='datetime-local'
                 id='data_entrega'
+                variant='20rem'
                 {...register('dateTime')}
+              />
+            </label>
+
+            <datalist id='status-order'>
+              <option value='pendente' />
+              <option value='entregue' />
+              <option value='cancelada' />
+            </datalist>
+
+            <label htmlFor='status'>
+              <span>Status</span>
+              <InputContainer
+                type='text'
+                id='status'
+                variant='15rem'
+                list='status-order'
+                {...register('status')}
               />
             </label>
           </div>

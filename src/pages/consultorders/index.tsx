@@ -1,13 +1,26 @@
 import { PencilSimpleLine, SignOut, Trash } from 'phosphor-react';
+import { useEffect, useState } from 'react';
 import { Header } from '../../components/Header';
+import { NewOrderProps } from '../neworder';
 import {
   ButtonContainer,
+  StatusContainer,
   WaperContainer,
   WaperFields,
   WarperTableContainer,
 } from './consultorders.styles';
 
 export function ConsultOrders() {
+  const [orders, setOrders] = useState<NewOrderProps[]>([]);
+
+  useEffect(() => {
+    const ordersJSON = localStorage.getItem('@bolachamaria:encomendas');
+
+    if (ordersJSON!.length > 0) {
+      setOrders(JSON.parse(ordersJSON!));
+    }
+  }, []);
+
   return (
     <WaperContainer>
       <Header title='Consulta Encomendas' />
@@ -40,144 +53,45 @@ export function ConsultOrders() {
                 </WaperFields>
               </th>
               <th>
+                <WaperFields>
+                  <span>Status</span>
+                  <input type='text' className='filterField' />
+                </WaperFields>
+              </th>
+              <th>
                 <span>Tarefas</span>
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Nº 0001</td>
-              <td>Paulo Lima</td>
-              <td>966434548</td>
-              <td>12/12/2022 10:00</td>
-              <td>
-                <ButtonContainer>
-                  <button>
-                    <SignOut size={20} />
-                  </button>
-                  <button>
-                    <PencilSimpleLine size={20} />
-                  </button>
-                  <button>
-                    <Trash size={20} />
-                  </button>
-                </ButtonContainer>
-              </td>
-            </tr>
-            <tr>
-              <td>Nº 0001</td>
-              <td>Paulo Lima</td>
-              <td>966434548</td>
-              <td>12/12/2022 10:00</td>
-              <td>
-                <ButtonContainer>
-                  <button>
-                    <SignOut size={20} />
-                  </button>
-                  <button>
-                    <PencilSimpleLine size={20} />
-                  </button>
-                  <button>
-                    <Trash size={20} />
-                  </button>
-                </ButtonContainer>
-              </td>
-            </tr>
-            <tr>
-              <td>Nº 0001</td>
-              <td>Paulo Lima</td>
-              <td>966434548</td>
-              <td>12/12/2022 10:00</td>
-              <td>
-                <ButtonContainer>
-                  <button>
-                    <SignOut size={20} />
-                  </button>
-                  <button>
-                    <PencilSimpleLine size={20} />
-                  </button>
-                  <button>
-                    <Trash size={20} />
-                  </button>
-                </ButtonContainer>
-              </td>
-            </tr>
-            <tr>
-              <td>Nº 0001</td>
-              <td>Paulo Lima</td>
-              <td>966434548</td>
-              <td>12/12/2022 10:00</td>
-              <td>
-                <ButtonContainer>
-                  <button>
-                    <SignOut size={20} />
-                  </button>
-                  <button>
-                    <PencilSimpleLine size={20} />
-                  </button>
-                  <button>
-                    <Trash size={20} />
-                  </button>
-                </ButtonContainer>
-              </td>
-            </tr>
-            <tr>
-              <td>Nº 0001</td>
-              <td>Paulo Lima</td>
-              <td>966434548</td>
-              <td>12/12/2022 10:00</td>
-              <td>
-                <ButtonContainer>
-                  <button>
-                    <SignOut size={20} />
-                  </button>
-                  <button>
-                    <PencilSimpleLine size={20} />
-                  </button>
-                  <button>
-                    <Trash size={20} />
-                  </button>
-                </ButtonContainer>
-              </td>
-            </tr>
-            <tr>
-              <td>Nº 0001</td>
-              <td>Paulo Lima</td>
-              <td>966434548</td>
-              <td>12/12/2022 10:00</td>
-              <td>
-                <ButtonContainer>
-                  <button>
-                    <SignOut size={20} />
-                  </button>
-                  <button>
-                    <PencilSimpleLine size={20} />
-                  </button>
-                  <button>
-                    <Trash size={20} />
-                  </button>
-                </ButtonContainer>
-              </td>
-            </tr>
-            <tr>
-              <td>Nº 0001</td>
-              <td>Paulo Lima</td>
-              <td>966434548</td>
-              <td>12/12/2022 10:00</td>
-              <td>
-                <ButtonContainer>
-                  <button>
-                    <SignOut size={20} />
-                  </button>
-                  <button>
-                    <PencilSimpleLine size={20} />
-                  </button>
-                  <button>
-                    <Trash size={20} />
-                  </button>
-                </ButtonContainer>
-              </td>
-            </tr>
+            {orders.map((item) => {
+              return (
+                <tr key={item.id}>
+                  <td>Nº {item.id}</td>
+                  <td>{item.name}</td>
+                  <td>{item.phone}</td>
+                  <td>{item.dateTime}</td>
+                  <td>
+                    <StatusContainer statusColor={item.statusOrder}>
+                      {item.statusOrder}
+                    </StatusContainer>
+                  </td>
+                  <td>
+                    <ButtonContainer>
+                      <button>
+                        <SignOut size={20} />
+                      </button>
+                      <button>
+                        <PencilSimpleLine size={20} />
+                      </button>
+                      <button>
+                        <Trash size={20} />
+                      </button>
+                    </ButtonContainer>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </WarperTableContainer>

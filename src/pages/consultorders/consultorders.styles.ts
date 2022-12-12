@@ -5,6 +5,7 @@ export const WaperContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  padding: 2rem;
 
   h1 {
     color: ${({ theme }) => theme.black};
@@ -15,7 +16,7 @@ export const WarperTableContainer = styled.div`
   height: 100%;
   width: 100%;
   color: ${({ theme }) => theme.white};
-  padding: 2rem 3rem;
+  padding: 2rem 1rem;
   background: ${({ theme }) => theme['gray-400']};
   border-radius: 8px;
 
@@ -118,5 +119,30 @@ export const WaperFields = styled.div`
 
   & > input {
     max-width: 8rem;
+  }
+`;
+
+const STATUS_COLOR = {
+  entregue: 'green-500',
+  pendente: 'yellow',
+  cancelada: 'danger',
+} as const;
+
+interface StatusContainerProps {
+  statusColor: keyof typeof STATUS_COLOR;
+}
+
+export const StatusContainer = styled.span<StatusContainerProps>`
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  gap: 1rem;
+  &::before {
+    content: '';
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 999px;
+    background: ${({ theme, statusColor }) => theme[STATUS_COLOR[statusColor]]};
   }
 `;

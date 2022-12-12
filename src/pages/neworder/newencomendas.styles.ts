@@ -34,25 +34,6 @@ export const FieldsContainer = styled.div`
     flex-direction: column;
     gap: 0.5rem;
   }
-
-  input {
-    height: 3.2rem;
-    width: 20rem;
-    border-radius: 4px;
-    background: ${({ theme }) => theme['gray-300']};
-    border: 0;
-    border-bottom: solid 4px transparent;
-    padding: 1rem;
-
-    &:focus {
-      border-bottom: solid 3px ${({ theme }) => theme['green-500']};
-      background: ${({ theme }) => theme['gray-100']};
-    }
-  }
-
-  #num_encomenda {
-    background: ${({ theme }) => theme['gray-400']};
-  }
 `;
 
 export const WarperTableContainer = styled.div`
@@ -151,9 +132,26 @@ export const TableContainer = styled.div`
   border-radius: 5px;
 `;
 
-export const InputContainer = styled.input`
+const BaseInputField = styled.input`
   height: 3.2rem;
-  width: 13rem;
+  border-radius: 4px;
+  background: ${({ theme }) => theme['gray-300']};
+  border: 0;
+  border-bottom: solid 4px transparent;
+  padding: 1rem;
+`;
+
+export const InputIDContainer = styled(BaseInputField)`
+  width: 8rem;
+  background: ${({ theme }) => theme['gray-400']};
+`;
+
+interface InputFieldsContainerProps {
+  variant?: '15rem' | '20rem' | '25rem';
+}
+
+export const InputContainer = styled(BaseInputField)<InputFieldsContainerProps>`
+  width: ${({ variant }) => variant};
   background: ${({ theme }) => theme['gray-300']};
 `;
 
