@@ -20,7 +20,6 @@ html{
 
 body{
  min-height: 100vh;
- background: ${({ theme }) => theme['gray-500']};
 }
 
 body, input, button, textarea{
