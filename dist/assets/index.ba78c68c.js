@@ -67,7 +67,7 @@ html{
 
 body{
  min-height: 100vh;
- background: ${({theme:e})=>e["gray-400"]};
+ background: ${({theme:e})=>e["gray-500"]};
 }
 
 body, input, button, textarea{
