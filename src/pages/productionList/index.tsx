@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { WaperContainer } from './prouctionlist.styles';
+import { WarperContainer } from './prouctionlist.styles';
 import { NewOrderProps } from '../neworder';
 
 export function ProductionList() {
@@ -29,8 +29,16 @@ export function ProductionList() {
 
   console.log(listOrder);
   return (
-    <WaperContainer>
+    <WarperContainer>
       <h1>production list</h1>
-    </WaperContainer>
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Quantidade pedido</th>
+          </tr>
+        </thead>
+      </table>
+    </WarperContainer>
   );
 }

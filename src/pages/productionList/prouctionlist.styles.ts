@@ -1,3 +1,5 @@
 import styled from 'styled-components';
 
-export const WaperContainer = styled.div``;
+export const WarperContainer = styled.div`
+  backgroun: ${({ theme }) => theme['gray-100']};
+`;
