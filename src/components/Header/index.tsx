@@ -1,4 +1,3 @@
-import { ShoppingCart } from 'phosphor-react';
 import { Link } from 'react-router-dom';
 import { HeaderContainer } from './header.styles';
 
@@ -12,9 +11,15 @@ export function Header({ title }: HeaderProps) {
       <h1>{title}</h1>
       <nav>
         <ul>
-          <li><Link to={'/novaencomenda'}/></li>
-          <li><Link to={'/listaencomendas'}/></li>
-          <li><Link to={'/listaprodutos'}/></li>
+          <li>
+            <Link to={'/novaencomenda'} />
+          </li>
+          <li>
+            <Link to={'/listaencomendas'} />
+          </li>
+          <li>
+            <Link to={'/listaprodutos'} />
+          </li>
         </ul>
       </nav>
     </HeaderContainer>

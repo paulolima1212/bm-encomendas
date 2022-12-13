@@ -23,7 +23,7 @@ export function ConsultOrders() {
 
   return (
     <WaperContainer>
-      <Header title='Consulta Encomendas' />
+      <Header title="Consulta Encomendas" />
       <WarperTableContainer>
         <table>
           <thead>
@@ -31,31 +31,31 @@ export function ConsultOrders() {
               <th>
                 <WaperFields>
                   <span>Encomenda</span>
-                  <input type='text' className='filterField active' />
+                  <input type="text" className="filterField active" />
                 </WaperFields>
               </th>
               <th>
                 <WaperFields>
                   <span>Cliente</span>
-                  <input type='text' className='filterField' />
+                  <input type="text" className="filterField" />
                 </WaperFields>
               </th>
               <th>
                 <WaperFields>
                   <span>Tlm/Tlf</span>
-                  <input type='text' className='filterField' />
+                  <input type="text" className="filterField" />
                 </WaperFields>
               </th>
               <th>
                 <WaperFields>
                   <span>Recolha</span>
-                  <input type='text' className='filterField' />
+                  <input type="text" className="filterField" />
                 </WaperFields>
               </th>
               <th>
                 <WaperFields>
                   <span>Status</span>
-                  <input type='text' className='filterField' />
+                  <input type="text" className="filterField" />
                 </WaperFields>
               </th>
               <th>

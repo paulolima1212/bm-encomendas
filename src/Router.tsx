@@ -6,9 +6,9 @@ import { ProductionList } from './pages/productionList';
 export function Router() {
   return (
     <Routes>
-      <Route path='/novaencomenda' element={<NewOrder />} />
-      <Route path='/listaencomendas' element={<ConsultOrders />} />
-      <Route path='/listaprodutos' element={<ProductionList />} />
+      <Route path="/novaencomenda" element={<NewOrder />} />
+      <Route path="/listaencomendas" element={<ConsultOrders />} />
+      <Route path="/listaprodutos" element={<ProductionList />} />
     </Routes>
   );
 }

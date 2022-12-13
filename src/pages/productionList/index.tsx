@@ -13,20 +13,6 @@ export function ProductionList() {
     }
   }, []);
 
-  const listProducts = listOrder.reduce(
-    (acc, order) => {
-      return acc;
-    },
-    {
-      id: 0,
-      name: '',
-      phone: '',
-      dateTime: '',
-      products: [],
-      statusOrder: '',
-    }
-  );
-
   console.log(listOrder);
   return (
     <WarperContainer>
